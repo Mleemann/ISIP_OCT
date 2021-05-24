@@ -4,22 +4,33 @@
 import cv2 as cv
 import os
 from imageio import imread
+import numpy as np
+import preprocessing as pre
+import utils as utls
 
 ######################
 # Prepare input data #
 ######################
-path_template_srf = '/Users/ibailertxundi/Desktop/MASTERRA/Spring semester/Introduction to Signal and Image Processing/project/ISIP_OCT/Train-Data/SRF'
-path_template_no_srf = '/Users/ibailertxundi/Desktop/MASTERRA/Spring semester/Introduction to Signal and Image Processing/project/ISIP_OCT/Train-Data/NoSRF'
-image_path = '/Users/ibailertxundi/Desktop/MASTERRA/Spring semester/Introduction to Signal and Image Processing/project/ISIP_OCT/Train-Data/SRF'
+path_template_srf = '/Users/ibailertxundi/Desktop/patchSRF/'
+path_template_no_srf = '/Users/ibailertxundi/Desktop/patchNoSRF/'
+image_path = '/Users/ibailertxundi/Desktop/SRF/11.png'
+#match_image = imread(image_path)
 
-templates_srf = [os.path.basename(file) for file in os.listdir(path_template_srf)]
-templates_no_srf = [os.path.basename(file) for file in os.listdir(path_template_no_srf)]
-match_image = imread(image_path)
+#list_templates_srf = [os.path.basename(file) for file in os.listdir(path_template_srf)]
+#templates_srf = np.asarray(list_templates_srf)
+#list_templates_no_srf = [os.path.basename(file) for file in os.listdir(path_template_no_srf)]
+#templates_no_srf = np.asarray(list_templates_no_srf)
+
+templates_no_srf = pre.preprocess_images(path_template_no_srf)
+templates_srf = pre.preprocess_images(path_template_srf)
+match_image = pre.preprocess(image_path)
+
 # There are 6 matching options, we will most likely choose 'cv.TM_CCORR_NORMED' == 3
 templeta_matching = ['cv.TM_CCOEFF', 'cv.TM_CCOEFF_NORMED', 'cv.TM_CCORR',
             'cv.TM_CCORR_NORMED', 'cv.TM_SQDIFF', 'cv.TM_SQDIFF_NORMED']
 
 m_method = eval(templeta_matching[3])
+
 
 ###################
 # Build functions #
@@ -47,7 +58,6 @@ def compare_scores(srf_scores,no_srf_scores,matching_img):
 def matching(templates, img_to_match, matching_method):
     # Create empty list to output
     best_scores = list()
-
     for patch in templates:
         scores = cv.matchTemplate(img_to_match,patch, matching_method)
         min_val, max_val, min_loc, max_loc = cv.minMaxLoc(scores)
@@ -66,3 +76,5 @@ best_no_sfr = matching(templates_no_srf,match_image,m_method)
 
 # Get list with image and assigned type
 Result = compare_scores(best_sfr,best_no_sfr,match_image)
+
+print(Result[2])
