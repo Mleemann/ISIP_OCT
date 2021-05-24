@@ -36,7 +36,7 @@ m_method = eval(templeta_matching[3])
 # Cluster and choose best scores
 def compare_scores(srf_scores,no_srf_scores,matching_img):
     """
-    # Cluster and choose best scores
+    Cluster and choose best scores
 
     input: matching image, srf and no srf scores to compare
     output: list with image and result
