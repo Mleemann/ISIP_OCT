@@ -81,6 +81,7 @@ def crop_images(path_to_images):
     return cropped_images
 
 
+
 def histogram_equalization(image):
     """
     Adjusts contrasts of an image using it's histogram

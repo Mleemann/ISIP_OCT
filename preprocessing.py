@@ -46,3 +46,4 @@ def preprocess(path_to_images):
         denoised_images.append(denoised_img)
 
     return denoised_images
+

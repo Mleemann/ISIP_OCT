@@ -7,23 +7,20 @@ from imageio import imread
 import numpy as np
 import preprocessing as pre
 import utils as utls
+import matplotlib.pyplot as plt
+import skimage
 
 ######################
 # Prepare input data #
 ######################
-path_template_srf = '/Users/ibailertxundi/Desktop/patchSRF/'
-path_template_no_srf = '/Users/ibailertxundi/Desktop/patchNoSRF/'
-image_path = '/Users/ibailertxundi/Desktop/SRF/11.png'
-#match_image = imread(image_path)
-
-#list_templates_srf = [os.path.basename(file) for file in os.listdir(path_template_srf)]
-#templates_srf = np.asarray(list_templates_srf)
-#list_templates_no_srf = [os.path.basename(file) for file in os.listdir(path_template_no_srf)]
-#templates_no_srf = np.asarray(list_templates_no_srf)
+path_template_srf = '/Users/ibailertxundi/Desktop/SRF/'
+path_template_no_srf = '/Users/ibailertxundi/Desktop/NoSRF/'
+image_path = '/Users/ibailertxundi/Desktop/rest_of_images/nosrf/'
 
 templates_no_srf = pre.preprocess_images(path_template_no_srf)
 templates_srf = pre.preprocess_images(path_template_srf)
-match_image = pre.preprocess(image_path)
+match_images = pre.preprocess(image_path)
+match_image = match_images[1]
 
 # There are 6 matching options, we will most likely choose 'cv.TM_CCORR_NORMED' == 3
 templeta_matching = ['cv.TM_CCOEFF', 'cv.TM_CCOEFF_NORMED', 'cv.TM_CCORR',
@@ -38,6 +35,12 @@ m_method = eval(templeta_matching[3])
 
 # Cluster and choose best scores
 def compare_scores(srf_scores,no_srf_scores,matching_img):
+    """
+    # Cluster and choose best scores
+
+    input: matching image, srf and no srf scores to compare
+    output: list with image and result
+    """
     # Assert array types and length
     assert 'list' in str(type(srf_scores))
     assert 'list' in str(type(no_srf_scores))
@@ -49,13 +52,19 @@ def compare_scores(srf_scores,no_srf_scores,matching_img):
     
     # Return list with image and its type
     if m_srf>m_no_srf:
-        return(list(matching_img,'srf'))
+        return([matching_img,'srf'])
 
     else:
-        return(list(matching_img,'no_srf'))
+        return([matching_img,'no_srf'])
 
-# Matching algorithm over the image with all templates
+
 def matching(templates, img_to_match, matching_method):
+    """
+    Implement matching algorithm over the image with all templates
+
+    input: template images, images to match and method
+    output: list with best scores
+    """
     # Create empty list to output
     best_scores = list()
     for patch in templates:
@@ -65,16 +74,35 @@ def matching(templates, img_to_match, matching_method):
     
     return(best_scores)
 
+
+def convert(images):
+    """
+    Transform images to 8-bit
+
+    input: images
+    output: transformed images
+    """
+    converted_images = []
+    for image in images:
+        converted = skimage.img_as_ubyte(image)
+        converted_images.append(converted)
+    
+    return converted_images
+
 ################
 # Run matching #
 ################
 
+# Convert images to 8-bit and numpy array
+templates_no_srf = np.asarray(convert(templates_srf))
+templates_srf = np.asarray(convert(templates_srf))
+match_image = np.asarray(convert(match_image))
+
 # Get best scores
 best_sfr = matching(templates_srf,match_image,m_method)
-
 best_no_sfr = matching(templates_no_srf,match_image,m_method)
 
 # Get list with image and assigned type
 Result = compare_scores(best_sfr,best_no_sfr,match_image)
 
-print(Result[2])
+print(Result[1])
