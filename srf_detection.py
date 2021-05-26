@@ -26,7 +26,7 @@ def main():
     ######################
     path_template_srf = '/Users/tugbaucar/Desktop/ISIP_OCT/Train-Data/SRF/'
     path_template_no_srf = '/Users/tugbaucar/Desktop/ISIP_OCT/Train-Data/NoSRF/'
-    image_path = '/Users/tugbaucar/Desktop/ISIP_OCT/Test-Data/handout/'   #will become : '/Users/tugbaucar/Desktop/ISIP_OCT/Test-Data/handout'
+    image_path = '/Users/tugbaucar/Desktop/ISIP_OCT/Test-Data/'   #will become : '/Users/tugbaucar/Desktop/ISIP_OCT/Test-Data/handout'
     
     image_paths = glob.glob(image_path + '*')
     image_names = [os.path.basename(image_path) for image_path in image_paths]
