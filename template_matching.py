@@ -10,25 +10,6 @@ import utils as utls
 import matplotlib.pyplot as plt
 import skimage
 
-######################
-# Prepare input data #
-######################
-path_template_srf = '/Users/ibailertxundi/Desktop/SRF/'
-path_template_no_srf = '/Users/ibailertxundi/Desktop/NoSRF/'
-image_path = '/Users/ibailertxundi/Desktop/rest_of_images/nosrf/'
-
-templates_no_srf = pre.preprocess_images(path_template_no_srf)
-templates_srf = pre.preprocess_images(path_template_srf)
-match_images = pre.preprocess(image_path)
-match_image = match_images[1]
-
-# There are 6 matching options, we will most likely choose 'cv.TM_CCORR_NORMED' == 3
-templeta_matching = ['cv.TM_CCOEFF', 'cv.TM_CCOEFF_NORMED', 'cv.TM_CCORR',
-            'cv.TM_CCORR_NORMED', 'cv.TM_SQDIFF', 'cv.TM_SQDIFF_NORMED']
-
-m_method = eval(templeta_matching[3])
-
-
 ###################
 # Build functions #
 ###################
@@ -52,10 +33,10 @@ def compare_scores(srf_scores,no_srf_scores,matching_img):
     
     # Return list with image and its type
     if m_srf>m_no_srf:
-        return([matching_img,'srf'])
+        return([matching_img,1])
 
     else:
-        return([matching_img,'no_srf'])
+        return([matching_img,0])
 
 
 def matching(templates, img_to_match, matching_method):
@@ -70,7 +51,11 @@ def matching(templates, img_to_match, matching_method):
     for patch in templates:
         scores = cv.matchTemplate(img_to_match,patch, matching_method)
         min_val, max_val, min_loc, max_loc = cv.minMaxLoc(scores)
-        best_scores.append(max_val)
+        # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
+        if matching_method in ['cv.TM_SQDIFF', 'cv.TM_SQDIFF_NORMED']:
+            best_scores.append(min_val)
+        else:
+            best_scores.append(max_val)
     
     return(best_scores)
 
@@ -89,20 +74,4 @@ def convert(images):
     
     return converted_images
 
-################
-# Run matching #
-################
 
-# Convert images to 8-bit and numpy array
-templates_no_srf = np.asarray(convert(templates_srf))
-templates_srf = np.asarray(convert(templates_srf))
-match_image = np.asarray(convert(match_image))
-
-# Get best scores
-best_sfr = matching(templates_srf,match_image,m_method)
-best_no_sfr = matching(templates_no_srf,match_image,m_method)
-
-# Get list with image and assigned type
-Result = compare_scores(best_sfr,best_no_sfr,match_image)
-
-print(Result[1])
