@@ -54,7 +54,7 @@ def main():
     for match_image in match_images:
     
         # Convert images to 8-bit and numpy array
-        templates_no_srf = np.asarray(tmpmatch.convert(template_no_srfw))
+        templates_no_srf = np.asarray(tmpmatch.convert(template_no_srf))
         templates_srf = np.asarray(tmpmatch.convert(templates_srf))
     
         match_image = np.asarray(tmpmatch.convert(match_image))
