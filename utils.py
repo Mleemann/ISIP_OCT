@@ -116,10 +116,7 @@ def nlm_denoising(image):
     # estimate the noise standard deviation from the noisy image
     sigma_est = np.mean(estimate_sigma(image))
 
-    patch_kw = dict(patch_size=5,      # 5x5 patches
-                patch_distance=6)  # 13x13 search area
-
     # fast algorithm
-    img_denoised = denoise_nl_means(image, h=0.8 * sigma_est, fast_mode=True, **patch_kw)
+    img_denoised = denoise_nl_means(image, h=0.8 * sigma_est, fast_mode=True)
 
     return img_denoised
