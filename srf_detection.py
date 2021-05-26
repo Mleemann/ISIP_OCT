@@ -33,11 +33,11 @@ def main():
     
     result_filename = '/Users/tugbaucar/Desktop/ISIP_OCT/project_Leemann_Lertxundi_Agaoglu.csv' 
     
-    # There are 6 matching options, we will most likely choose 'cv.TM_CCORR_NORMED' == 2
+    # There are 6 matching options, we will most likely choose 'cv.TM_CCORR_NORMED' == 3
     templeta_matching = ['cv.TM_CCOEFF', 'cv.TM_CCOEFF_NORMED', 'cv.TM_CCORR',
             'cv.TM_CCORR_NORMED', 'cv.TM_SQDIFF', 'cv.TM_SQDIFF_NORMED']
     
-    m_method = eval(templeta_matching[2]) 
+    m_method = eval(templeta_matching[3]) 
     
     
     templates_no_srf = pre.preprocess_images(path_template_no_srf)    
