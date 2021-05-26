@@ -7,7 +7,7 @@ import numpy as np
 from skimage import filters, color, exposure
 import os
 import matplotlib.pyplot as plt
-from skimage.restoration import denoise_bilateral, denoise_nl_means
+from skimage.restoration import denoise_bilateral, denoise_nl_means, estimate_sigma
 
 
 def create_mask(img, sigma=2):
@@ -113,6 +113,13 @@ def nlm_denoising(image):
     input: image
     output: image after denoising
     """
-    img_denoised = denoise_nl_means(image)
+    # estimate the noise standard deviation from the noisy image
+    sigma_est = np.mean(estimate_sigma(image))
+
+    patch_kw = dict(patch_size=5,      # 5x5 patches
+                patch_distance=6)  # 13x13 search area
+
+    # fast algorithm
+    img_denoised = denoise_nl_means(image, h=0.8 * sigma_est, fast_mode=True, **patch_kw)
 
     return img_denoised
