@@ -37,7 +37,7 @@ def main():
     templeta_matching = ['cv.TM_CCOEFF', 'cv.TM_CCOEFF_NORMED', 'cv.TM_CCORR',
             'cv.TM_CCORR_NORMED', 'cv.TM_SQDIFF', 'cv.TM_SQDIFF_NORMED']
     
-    m_method = eval(templeta_matching[3]) 
+    m_method = eval(templeta_matching[1]) 
     
     
     templates_no_srf = pre.preprocess_images(path_template_no_srf)    
