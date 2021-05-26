@@ -28,7 +28,7 @@ def main():
     path_template_no_srf = '/Users/tugbaucar/Desktop/ISIP_OCT/Train-Data/NoSRF/'
     image_path = '/Users/tugbaucar/Desktop/ISIP_OCT/Test-Data/handout/'   #will become : '/Users/tugbaucar/Desktop/ISIP_OCT/Test-Data/handout'
     
-    image_paths = glob.glob('/Users/tugbaucar/Desktop/ISIP_OCT/Test-Data/handout/*')
+    image_paths = glob.glob(image_path + '*')
     image_names = [os.path.basename(image_path) for image_path in image_paths]
     
     result_filename = '/Users/tugbaucar/Desktop/ISIP_OCT/project_Leemann_Lertxundi_Agaoglu.csv' 
@@ -54,7 +54,7 @@ def main():
     for match_image in match_images:
     
         # Convert images to 8-bit and numpy array
-        templates_no_srf = np.asarray(tmpmatch.convert(templates_srf))
+        templates_no_srf = np.asarray(tmpmatch.convert(template_no_srfw))
         templates_srf = np.asarray(tmpmatch.convert(templates_srf))
     
         match_image = np.asarray(tmpmatch.convert(match_image))
